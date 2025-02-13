@@ -1,8 +1,23 @@
+import axios from "axios";
 import { useEcommerce } from "../features/commerce";
 
 function EcommerceCard() {
   const { state, dispatch } = useEcommerce();
-
+  const handleAddtoCart = (item) => {
+    try {
+       axios.post("http://localhost:3000/cart", item).then((data) => {
+        if (data) {
+          console.log("success", data);
+        }
+        dispatch({
+          type: "ADD_CART",
+          payload: item,
+        });
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div className="grid grid-cols-2 gap-6">
@@ -19,18 +34,13 @@ function EcommerceCard() {
           <p className="text-sm text-gray-500">{item.details}</p>
           <button
             className="bg-blue-500 text-white px-4 py-2 mt-4 rounded-lg w-full hover:bg-blue-700"
-            onClick={() => {
-              dispatch({ type: "ADD_CART", payload: item });
-              dispatch({type: "CART_INCREAMENT", payload: item});
-            }}
-          > 
-          
+            onClick={() => handleAddtoCart(item)}
+          >
             Add to Cart
-          </button> 
+          </button>
         </div>
       ))}
-      
-    </div>    
+    </div>
   );
 }
 

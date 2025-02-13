@@ -7,7 +7,7 @@ function Esidebar() {
   const [cartquantity, setCartquantity] = useState(0);
 
   useEffect(() => {
-    const total = state.cart.reduce((sum, item) => sum + item.price, 0);
+    const total = state.cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
     setTotalPrice(total);
 
     const itemquantity = state.cart.reduce(
@@ -15,7 +15,7 @@ function Esidebar() {
       0
     );
     setCartquantity(itemquantity);
-  }, [state.cart]);
+  }, [state.cart]); 
 
   return (
     <div className="bg-gray-200 shadow rounded-lg p-6">
@@ -39,7 +39,13 @@ function Esidebar() {
                 +
               </button>
               {item.quantity}
-              <button>-</button>
+              <button
+                onClick={() => {
+                  dispatch({ type: "CART_DECREMENT", payload: item.id });
+                }}
+              >
+                -
+              </button>
             </div>
           </div>
         ))
